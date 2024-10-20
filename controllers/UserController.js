@@ -45,8 +45,9 @@ exports.GetUsers = async(req, res) => {
 
 exports.GetUserByID = async(req, res) => {
     try {
-        let user_id = req.params.id;
-        let user = await User.findOne({ _id: user_id });
+        let user_Id = req.params.id;
+
+        let user = await User.findOne({ _id: user_Id });
         res.status(200).json(user);
 
     } catch (error) {
