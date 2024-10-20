@@ -1,15 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const multer = require('multer');
-const path = require('path');
-const jwt = require('jsonwebtoken');
-const secret_key = "user_auth";
-const bcrypt = require('bcrypt');
+const UserRoute = require('./routes/userRoutes')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const User = require('./User')
+const jwt = require('jsonwebtoken');
+const path = require('path');
 const app = express();
+const secret_key = "user_auth"
 app.use(express.static(path.join(__dirname, 'media')));
 app.use(express.json());
 app.use(cookieParser());
@@ -24,45 +22,15 @@ mongoose.connect(process.env.DB_URI)
         console.log("Failed to connect with MongoDB");
     });
 // multer settings
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'media');
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
-const upload = multer({ storage: storage });
+app.use(UserRoute);
 // create user
 app.get('/', (req, res) => {
     res.send("My Api");
 });
-app.post('/create-user', upload.single('image'), async(req, res) => {
-    let { first_name, last_name, password, email } = req.body;
-    try {
-        let user = new User({
-            first_name,
-            last_name,
-            email,
-            password,
-            image: req.file.filename
-        })
-        await user.save();
-        res.status(200).send({ success: true, message: `${user.first_name} Add Successfully` });
-    } catch (error) {
-        res.status(500).send(error.message)
-    }
-});
+
 // get all users
 app.get('/get-users', async(req, res) => {
-        try {
-            let users = await User.find({});
-            if (users.length > 0) {
-                res.status(200).send(users);
-            }
-        } catch (error) {
-            res.status(500).send(error.message)
-        }
+
     })
     // get specific User
 app.get('/get-user/:id', async(req, res) => {
@@ -95,31 +63,31 @@ app.delete('/delete-user/:id', async(req, res) => {
     }
 });
 // edit-update specific user
-app.post('/edit-user/:id', upload.single('image'), async(req, res) => {
-    try {
-        let { first_name, last_name } = req.body; // Get fields from request body
-        let user_id = req.params.id; // Get user ID from URL params
-        let image = req.file.filename
+// app.post('/edit-user/:id', upload.single('image'), async(req, res) => {
+//     try {
+//         let { first_name, last_name } = req.body; // Get fields from request body
+//         let user_id = req.params.id; // Get user ID from URL params
+//         let image = req.file.filename
 
-        // Find and update the user's details, return the updated user
-        let updatedUser = await User.findByIdAndUpdate(
-            user_id, { $set: { first_name, last_name, image } }, // Update fields
-            { new: true } // Ensure the updated document is returned and validated
-        );
+//         // Find and update the user's details, return the updated user
+//         let updatedUser = await User.findByIdAndUpdate(
+//             user_id, { $set: { first_name, last_name, image } }, // Update fields
+//             { new: true } // Ensure the updated document is returned and validated
+//         );
 
 
 
-        if (updatedUser) {
-            res.status(200).send({ success: true, message: "User updated successfully", user: updatedUser });
-        } else {
-            res.status(404).send({ success: false, message: "User Not Found" });
-        }
+//         if (updatedUser) {
+//             res.status(200).send({ success: true, message: "User updated successfully", user: updatedUser });
+//         } else {
+//             res.status(404).send({ success: false, message: "User Not Found" });
+//         }
 
-    } catch (error) {
-        console.error("Error:", error); // Log any error
-        res.status(500).send({ success: false, message: error.message });
-    }
-});
+//     } catch (error) {
+//         console.error("Error:", error); // Log any error
+//         res.status(500).send({ success: false, message: error.message });
+//     }
+// });
 
 // login 
 app.post('/login', async(req, res) => {
