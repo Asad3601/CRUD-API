@@ -31,18 +31,8 @@ app.get('/', (req, res) => {
 // get all users
 
 // get specific User
-app.get('/get-user/:id', async(req, res) => {
-        try {
-            let user_id = req.params.id;
 
-            let user = await User.findOne({ _id: user_id });
-            res.status(200).send(user);
-
-        } catch (error) {
-            res.status(500).send(error.message)
-        }
-    })
-    // delete specific user
+// delete specific user
 app.delete('/delete-user/:id', async(req, res) => {
     try {
         let user_id = req.params.id;
