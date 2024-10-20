@@ -22,7 +22,7 @@ mongoose.connect(process.env.DB_URI)
         console.log("Failed to connect with MongoDB");
     });
 // multer settings
-app.use(UserRoute);
+app.use('/users', UserRoute);
 // create user
 app.get('/', (req, res) => {
     res.send("My Api");
