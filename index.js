@@ -22,17 +22,15 @@ mongoose.connect(process.env.DB_URI)
         console.log("Failed to connect with MongoDB");
     });
 // multer settings
-app.use('/users', UserRoute);
+app.use(UserRoute);
 // create user
 app.get('/', (req, res) => {
     res.send("My Api");
 });
 
 // get all users
-app.get('/get-users', async(req, res) => {
 
-    })
-    // get specific User
+// get specific User
 app.get('/get-user/:id', async(req, res) => {
         try {
             let user_id = req.params.id;
