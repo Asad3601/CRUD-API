@@ -5,14 +5,10 @@ const userSchema = new Schema({
     first_name: {
         type: String,
         required: true,
-        maxlength: 50,
-        match: [/^[a-zA-Z\s\-]+$/, 'First Name can only contain alphabets, spaces, and hyphens']
     },
     last_name: {
         type: String,
         required: true,
-        maxlength: 50,
-        match: [/^[a-zA-Z\s\-]+$/, 'Last Name can only contain alphabets, spaces, and hyphens']
     },
     email: {
         type: String,
@@ -23,13 +19,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    },
-    image: {
-        type: String,
-        default: 'user.png'
     }
-
-
 }, {
     timestamps: true
 });
