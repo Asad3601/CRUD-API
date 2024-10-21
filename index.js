@@ -21,7 +21,9 @@ mongoose.connect(process.env.DB_URI)
         console.log("Failed to connect with MongoDB");
     });
 // multer settings
-
+app.get('/', (req, res) => {
+    res.send("Welcome To My API");
+})
 app.use('/users', UserRoute);
 
 
